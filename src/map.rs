@@ -10,6 +10,8 @@ use crate::value::Value;
 use alloc::string::String;
 #[cfg(feature = "preserve_order")]
 use alloc::vec::Vec;
+#[cfg(feature = "borsh")]
+use borsh::{BorshDeserialize, BorshSerialize};
 use core::borrow::Borrow;
 use core::fmt::{self, Debug};
 use core::hash::{Hash, Hasher};
@@ -25,7 +27,11 @@ use alloc::collections::{btree_map, BTreeMap};
 use indexmap::IndexMap;
 
 /// Represents a JSON key/value type.
-pub struct Map<K, V> {
+#[cfg_attr(feature = "borsh", derive(BorshSerialize, BorshDeserialize))]
+pub struct Map<K, V>
+where
+    K: Ord,
+{
     map: MapImpl<K, V>,
 }
 

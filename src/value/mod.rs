@@ -94,6 +94,8 @@ use crate::error::Error;
 use crate::io;
 use alloc::string::String;
 use alloc::vec::Vec;
+#[cfg(feature = "borsh")]
+use borsh::{BorshDeserialize, BorshSerialize};
 use core::fmt::{self, Debug, Display};
 use core::mem;
 use core::str;
@@ -113,6 +115,7 @@ pub use crate::raw::{to_raw_value, RawValue};
 ///
 /// See the [`serde_json::value` module documentation](self) for usage examples.
 #[derive(Clone, Eq, PartialEq, Hash)]
+#[cfg_attr(feature = "borsh", derive(BorshSerialize, BorshDeserialize))]
 pub enum Value {
     /// Represents a JSON null value.
     ///

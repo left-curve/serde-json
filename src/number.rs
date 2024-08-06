@@ -6,6 +6,8 @@ use crate::error::ErrorCode;
 use alloc::borrow::ToOwned;
 #[cfg(feature = "arbitrary_precision")]
 use alloc::string::{String, ToString};
+#[cfg(feature = "borsh")]
+use borsh::{BorshDeserialize, BorshSerialize};
 use core::fmt::{self, Debug, Display};
 #[cfg(not(feature = "arbitrary_precision"))]
 use core::hash::{Hash, Hasher};
@@ -19,12 +21,14 @@ pub(crate) const TOKEN: &str = "$serde_json::private::Number";
 
 /// Represents a JSON number, whether integer or floating point.
 #[derive(Clone, PartialEq, Eq, Hash)]
+#[cfg_attr(feature = "borsh", derive(BorshSerialize, BorshDeserialize))]
 pub struct Number {
     n: N,
 }
 
 #[cfg(not(feature = "arbitrary_precision"))]
 #[derive(Copy, Clone)]
+#[cfg_attr(feature = "borsh", derive(BorshSerialize, BorshDeserialize))]
 enum N {
     PosInt(u64),
     /// Always less than zero.
